@@ -89,7 +89,23 @@ add address-families=ip as=153137 disabled=no hold-time=30s input.filter="" \
     redistribute=connected router-id=36.92.254.158 remote.address=36.92.254.157/32 remote.as=7713
 ```
 ### tambahan untuk routing filter
+tambahin rule ini dibaris pertama pada bgp filter
 ```bash
 add chain=bgp-out rule="if (dst in 10.0.0.0/8 || dst in 172.16.0.0/12 || dst in 192.168.0.0/16) { reject; }"
 ```
+atau begini:
+```bash
+/routing filter rule
+# Tambahkan rule untuk memblokir IP privat
+add chain=bgp-out rule="if (dst in 10.0.0.0/8) { reject; }"
+add chain=bgp-out rule="if (dst in 172.16.0.0/12) { reject; }"
+add chain=bgp-out rule="if (dst in 192.168.0.0/16) { reject; }"
+
+# Rule untuk mengizinkan subnet yang ingin diiklankan
+add chain=bgp-out rule="if (dst in 160.191.62.0/24 && dst-len in 24-32) { accept }"
+
+# Rule untuk memblokir semua route lainnya
+add chain=bgp-out rule="reject;"
+```
 Selesai
+
