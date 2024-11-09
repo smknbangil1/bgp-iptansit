@@ -1,6 +1,10 @@
-Jasa setting Mikrotik Berpengalaman 
-PURWANTO 
-https://wa.me/6282233483221
+# Jasa setting Mikrotik Berpengalaman  
+PURWANTO  
+[https://wa.me/6282233483221](https://wa.me/6282233483221)  
+
+---
+
+Routing BGP Mikrotik RouterOS v7
 
 ### 1. **Konfigurasi IP Address**
 Konfigurasi dua IP address, satu untuk interface yang terkoneksi ke penyedia IP transit (ether1) dan satu untuk subnet yang akan diiklankan (ether3).
