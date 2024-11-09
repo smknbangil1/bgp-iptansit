@@ -66,3 +66,30 @@ add chain=bgp-out rule="reject;"
    - Rute lainnya akan di-drop agar tidak diiklankan secara tidak sengaja.
 
 Dengan konfigurasi ini, MikroTik akan terhubung ke penyedia IP transit menggunakan BGP, mengiklankan jaringan `160.191.62.0/24`, dan mendapatkan akses internet melalui IP transit.
+
+### Quick Set, Full Code
+```bash
+/ip address
+add address=36.92.254.158/30 interface=ether3 network=36.92.254.156
+add address=160.191.62.1/24 interface=ether1 network=160.191.62.0
+
+/ip dns
+set allow-remote-requests=yes servers=8.8.8.8,8.8.4.4
+
+/ip route
+add disabled=no distance=1 dst-address=0.0.0.0/0 gateway=36.92.254.157
+
+/routing filter rule
+add chain=bgp-out rule="if (dst in 160.191.62.0/24 && dst-len in 24-32) { accept }"
+add chain=bgp-out rule="reject;"
+
+/routing bgp connection
+add address-families=ip as=153137 disabled=no hold-time=30s input.filter="" \
+    local.role=ebgp name=bgp-ip-transit nexthop-choice=default output.filter-chain=bgp-out \
+    redistribute=connected router-id=36.92.254.158 remote.address=36.92.254.157/32 remote.as=7713
+```
+### tambahan untuk routing filter
+```bash
+add chain=bgp-out rule="if (dst in 10.0.0.0/8 || dst in 172.16.0.0/12 || dst in 192.168.0.0/16) { reject; }"
+```
+Selesai
